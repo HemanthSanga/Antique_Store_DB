@@ -244,49 +244,7 @@ MATCH (vc4:verified_Categories{Name:"Clocks"}),(c5:Customer{Name:"Niklas"}) MERG
 
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------
-//Deleting a relationship between two nodes
-MATCH (mu:Main_User{Name:"Store Owner"})<-[r:Inserts]-(i:Information{Name:"Categories and Information"})
-DELETE r
 
----------------------------------------------------------------------------------------------------------------------------------------------------------
-CREATE (c1:Customer{Name:"Hermann"})
-CREATE (c2:Customer{Name:"Bertha"})
-CREATE (c3:Customer{Name:"Wolfgang"})
-
-
-
-{
-  "surname" : "Taylor"
-}
-
-MATCH (c1:Customer{Name:"Hermann"})
-SET c1.surname = "$surname"
-RETURN c1.name, c1.surname
-
-
-
-//(MATCH (c2:Categories{Name:"Paintings"}),(p1:Purchase{Name:"Buy"}) MERGE (c2)-[r:Enters]->(p1) WHERE c2.Type = "Common")
-
-
-//(MATCH (c3:Categories{Name:"Furniture"})
-SET c3.type = "Common"
-RETURN c3.Name, c3.type
-MATCH (c3:Categories{Name:"Furniture"})
-SET c3.size = "Large"
-RETURN c3.Name, c3.type)
-
-
-
-//(MATCH (c2:Categories{Name:"Paintings"})
-WHERE c2.Type = "Common"
-RETURN c2)
-
-CREATE (neo {name:"maximus"})
-CREATE (andy { name:"Andy" })
-CREATE (michael { name: "Michael" })
-
-MATCH p =(andy { name:'Andy' })-[:WORKS_AT]->(neo)<-[:WORKS_AT]-(michael { name: 'Michael' })
-RETURN p
 
 
 
