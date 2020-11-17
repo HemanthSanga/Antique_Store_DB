@@ -1,0 +1,292 @@
+//Entities and Nodes used:
+//1. (mu)Main_User(Store Owner)
+//2. (ou)Other_User(Location Owner, Expertise)
+//3. (c)Customer(Hermann, Bertha, Wolfgang, Anna, Niklas)
+//4. (i)Information(Categories and Information)
+//5. (a)Authenticity(Verified Collection, Rejected Collection)
+//6. (uc)Unverified_Categories(Cars, Paintings, Furniture, Clocks, Porcelain)
+//7. (vc)Verified_Categories(Cars, Paintings, Furniture, Clocks, Porcelain)
+//8. (p)Purchase(Buy, Rent, Bid)
+//9. (pa)Pay(Buying Price, Renting Price, Agreed Price)
+//10. (m)Auction(Starting Bid)
+//11. (ch)Chance(Winner, Loser)
+//--------------------------------------------------------------------------------------------------
+
+//Creating Nodes
+CREATE (mu:Main_User{Name:"Store Owner"})
+CREATE (ou1:Other_User{Name:"Location Owner"})
+CREATE (ou2:Other_User{Name:"Expertise"})
+//
+CREATE (c1:Customer{Name:"Hermann"})
+CREATE (c2:Customer{Name:"Bertha"})
+CREATE (c3:Customer{Name:"Wolfgang"})
+CREATE (c4:Customer{Name:"Anna"})
+CREATE (c5:Customer{Name:"Niklas"})
+//
+CREATE (i:Information{Name:"Categories and Information"})
+CREATE (a1:Authenticity{Name:"Verified Collection"})
+CREATE (a2:Authenticity{Name:"Rejected Collection"})
+//
+CREATE (uc1:Unverified_Categories{Name:"Cars"})
+CREATE (uc2:Unverified_Categories{Name:"Paintings"})
+CREATE (uc3:Unverified_Categories{Name:"Furniture"})
+CREATE (uc4:Unverified_Categories{Name:"Clocks"})
+CREATE (uc5:Unverified_Categories{Name:"Porcelain"})
+
+//
+CREATE (vc1:verified_Categories{Name:"Cars"})
+CREATE (vc2:verified_Categories{Name:"Paintings"})
+CREATE (vc3:verified_Categories{Name:"Furniture"})
+CREATE (vc4:verified_Categories{Name:"Clocks"})
+CREATE (vc5:verified_Categories{Name:"Porcelain"})
+//
+CREATE (p1:Purchase{Name:"Buy"})
+CREATE (p2:Purchase{Name:"Rent"})
+CREATE (p3:Purchase{Name:"Bid"})
+//
+CREATE (pa1:Pay{Name:"Buying Price"})
+CREATE (pa2:Pay{Name:"Renting Price"})
+CREATE (pa3:Pay{Name:"Agreed Price"})
+//
+CREATE (m:Auction{Name:"Starting Bid"})
+//
+CREATE (ch1:Chance{Name:"Winner"})
+CREATE (ch2:Chance{Name:"Loser"})
+//--------------------------------------------------------------------------------------------------
+
+//Creating Properties
+//Properties type and size for unverified Cars
+MATCH (uc1:Unverified_Categories{Name:"Cars"})
+SET uc1 +={Size: "Large", Type: "Rare", Status: "unverified"}
+RETURN uc1.Name, uc1.Size, uc1.Type, uc1.Status
+
+//Properties type and size for unverified Paintings
+MATCH (uc2:Unverified_Categories{Name:"Paintings"})
+SET uc2 +={Size: "Small", Type: "Common", Status: "unverified"}
+RETURN uc2.Name, uc2.Size, uc2.Type, uc2.Status
+
+//Properties type and size for unverified Furniture
+MATCH (uc3:Unverified_Categories{Name:"Furniture"})
+SET uc3 +={Size: "Large", Type: "Common", Status: "unverified"}
+RETURN uc3.Name, uc3.Size, uc3.Type, uc3.Status
+
+//Properties type and size for unverified Clocks
+MATCH (uc4:Unverified_Categories{Name:"Clocks"})
+SET uc4 +={Size: "Medium", Type: "Rare", Status: "unverified"}
+RETURN uc4.Name, uc4.Size, uc4.Type, uc4.Status
+
+//Properties type and size for unverified Porcelain
+MATCH (uc5:Unverified_Categories{Name:"Porcelain"})
+SET uc5 +={Size: "Small", Type: "Common", Status: "unverified"}
+RETURN uc5.Name, uc5.Size, uc5.Type, uc5.Status
+//--------------------------------------------------------------------------------------------
+
+// Verified Category
+MATCH (a1:Authenticity{Name:"Verified Collection"})
+SET a1.Authentic = "True"
+RETURN a1.Name, a1.Authentic
+
+// Rejected Category
+MATCH (a2:Authenticity{Name:"Rejected Collection"})
+SET a2.Authentic = "False"
+RETURN a2.Name, a2.Authentic
+//----------------------------------------------------------------------------------------------
+//Properties type and size for verified Cars
+MATCH (vc1:Unverified_Categories{Name:"Cars"})
+SET vc1 +={Size: "Large", Type: "Rare", Status: "verified"}
+RETURN vc1.Name, vc1.Size, vc1.Type, vc1.Status
+
+//Properties type and size for verified Paintings
+MATCH (vc2:Unverified_Categories{Name:"Paintings"})
+SET vc2 +={Size: "Small", Type: "Common", Status: "verified"}
+RETURN vc2.Name, vc2.Size, vc2.Type, vc2.Status
+
+//Properties type and size for verified Furniture
+MATCH (vc3:Unverified_Categories{Name:"Furniture"})
+SET vc3 +={Size: "Large", Type: "Common", Status: "verified"}
+RETURN vc3.Name, vc3.Size, vc3.Type, vc3.Status
+
+//Properties type and size for verified Clocks
+MATCH (vc4:Unverified_Categories{Name:"Clocks"})
+SET vc4 +={Size: "Medium", Type: "Rare", Status: "verified"}
+RETURN vc4.Name, vc4.Size, vc4.Type, vc4.Status
+
+//Properties type and size for rejected Porcelain
+MATCH (vc5:Unverified_Categories{Name:"Porcelain"})
+SET vc5 +={Size: "Small", Type: "Common", Status: "rejected"}
+RETURN vc5.Name, vc5.Size, vc5.Type, vc5.Status
+//-----------------------------------------------------------------------------------------------
+//Properties type and size for Buy Collection
+MATCH (p1:Purchase{Name:"Buy"})
+SET p1.Items_Type = "Common"
+RETURN p1.Name, p1.Items_Type
+
+//type of Items in Rent Collection
+MATCH (p2:Purchase{Name:"Rent"})
+SET p2.Items_Type = "Common"
+RETURN p2.Name, p2.Items_Type
+
+//type of Items in Bid Collection
+MATCH (p3:Purchase{Name:"Bid"})
+SET p3.Items_Type = "Rare"
+RETURN p3.Name, p3.Items_Type
+//--------------------------------------------------------------------------------------------------
+
+
+//Creating Relations between the nodes
+
+//Relations among Main_User and Other_User Entities
+MATCH (mu:Main_User{Name:"Store Owner"}),(ou1:Other_User{Name:"Location Owner"}) MERGE (mu)-[r:Stores_Antiques]->(ou1)
+MATCH (mu:Main_User{Name:"Store Owner"}),(ou2:Other_User{Name:"Expertise"}) MERGE (mu)-[r:Provides_Information]->(ou2)
+
+//Relations among Main_User and Customer Entities
+MATCH (mu:Main_User{Name:"Store Owner"}),(c1:Customer{Name:"Hermann"}) MERGE (mu)-[r:Selling_Renting_Bidding]->(c1)
+MATCH (mu:Main_User{Name:"Store Owner"}),(c2:Customer{Name:"Bertha"}) MERGE (mu)-[r:Selling_Renting_Bidding]->(c2)
+MATCH (mu:Main_User{Name:"Store Owner"}),(c3:Customer{Name:"Wolfgang"}) MERGE (mu)-[r:Selling_Renting_Bidding]->(c3)
+MATCH (mu:Main_User{Name:"Store Owner"}),(c4:Customer{Name:"Anna"}) MERGE (mu)-[r:Selling_Renting_Bidding]->(c4)
+MATCH (mu:Main_User{Name:"Store Owner"}),(c5:Customer{Name:"Niklas"}) MERGE (mu)-[r:Selling_Renting_Bidding]->(c5)
+
+MATCH (mu:Main_User{Name:"Store Owner"}),(c1:Customer{Name:"Hermann"}) MERGE (mu)<-[r:Buying_Renting_Bidding]-(c1)
+MATCH (mu:Main_User{Name:"Store Owner"}),(c2:Customer{Name:"Bertha"}) MERGE (mu)<-[r:Buying_Renting_Bidding]-(c2)
+MATCH (mu:Main_User{Name:"Store Owner"}),(c3:Customer{Name:"Wolfgang"}) MERGE (mu)<-[r:Buying_Renting_Bidding]-(c3)
+MATCH (mu:Main_User{Name:"Store Owner"}),(c4:Customer{Name:"Anna"}) MERGE (mu)<-[r:Buying_Renting_Bidding]-(c4)
+MATCH (mu:Main_User{Name:"Store Owner"}),(c5:Customer{Name:"Niklas"}) MERGE (mu)<-[r:Buying_Renting_Bidding]-(c5)
+
+//Relations among Information, Main_user and Other_User Entities
+MATCH (i:Information{Name:"Categories and Information"}),(ou3:Other_User{Name:"Expertise"}) MERGE (i)<-[r:Requests]-(ou3)
+MATCH (mu:Main_User{Name:"Store Owner"}),(i:Information{Name:"Categories and Information"}) MERGE (mu)-[r:Inserts]->(i)
+
+//Relations among Other_User and Authenticity Entities
+MATCH (ou3:Other_User{Name:"Expertise"}),(a1:Authenticity{Name:"Verified Collection"}) MERGE (ou3)-[r:Confirms]->(a1)
+MATCH (ou3:Other_User{Name:"Expertise"}),(a2:Authenticity{Name:"Rejected Collection"}) MERGE (ou3)-[r:Confirms]->(a2)
+
+//Relations among Authenticity and unverified_Categories Entities
+MATCH (i:Information{Name:"Categories and Information"}),(uc1:Unverified_Categories{Name:"Cars"}) MERGE (i)-[r:has]->(uc1)
+MATCH (i:Information{Name:"Categories and Information"}),(uc2:Unverified_Categories{Name:"Paintings"}) MERGE (i)-[r:has]->(uc2)
+MATCH (i:Information{Name:"Categories and Information"}),(uc3:Unverified_Categories{Name:"Furniture"}) MERGE (i)-[r:has]->(uc3)
+MATCH (i:Information{Name:"Categories and Information"}),(uc4:Unverified_Categories{Name:"Clocks"}) MERGE (i)-[r:has]->(uc4)
+MATCH (i:Information{Name:"Categories and Information"}),(uc5:Unverified_Categories{Name:"Porcelain"}) MERGE (i)-[r:has]->(uc5)
+
+//Relations among Authenticity and verified_Categories Entities
+MATCH (a1:Authenticity{Name:"Verified Collection"}),(vc1:verified_Categories{Name:"Cars"}) MERGE (a1)-[r:Contains]->(vc1)
+MATCH (a1:Authenticity{Name:"Verified Collection"}),(vc2:verified_Categories{Name:"Paintings"}) MERGE (a1)-[r:Contains]->(vc2)
+MATCH (a1:Authenticity{Name:"Verified Collection"}),(vc3:verified_Categories{Name:"Furniture"}) MERGE (a1)-[r:Contains]->(vc3)
+MATCH (a1:Authenticity{Name:"Verified Collection"}),(vc4:verified_Categories{Name:"Clocks"}) MERGE (a1)-[r:Contains]->(vc4)
+MATCH (a2:Authenticity{Name:"Rejected Collection"}),(vc5:verified_Categories{Name:"Porcelain"}) MERGE (a2)-[r:Contains]->(vc5)
+
+
+// Relations among Customer and Auction Entities
+MATCH (c3:Customer{Name:"Wolfgang"}),(m:Auction{Name:"Starting Bid"}) MERGE (c3)-[r:Participates]->(m)
+MATCH (c4:Customer{Name:"Anna"}),(m:Auction{Name:"Starting Bid"}) MERGE (c4)-[r:Participates]->(m)
+MATCH (c5:Customer{Name:"Niklas"}),(m:Auction{Name:"Starting Bid"}) MERGE (c5)-[r:Participates]->(m)
+
+// Relations among Customer and Chance Entities
+MATCH (c3:Customer{Name:"Wolfgang"}),(ch1:Chance{Name:"Winner"}) MERGE (c3)-[r:May_be]->(ch1)
+MATCH (c4:Customer{Name:"Anna"}),(ch1:Chance{Name:"Winner"}) MERGE (c4)-[r:May_be]->(ch1)
+MATCH (c5:Customer{Name:"Niklas"}),(ch1:Chance{Name:"Winner"}) MERGE (c5)-[r:May_be]->(ch1)
+
+MATCH (c3:Customer{Name:"Wolfgang"}),(ch2:Chance{Name:"Loser"}) MERGE (c3)-[r:May_be]->(ch2)
+MATCH (c4:Customer{Name:"Anna"}),(ch2:Chance{Name:"Loser"}) MERGE (c4)-[r:May_be]->(ch2)
+MATCH (c5:Customer{Name:"Niklas"}),(ch2:Chance{Name:"Loser"}) MERGE (c5)-[r:May_be]->(ch2)
+
+// Relations between Auction and Purchase Entities
+MATCH (p3:Purchase{Name:"Bid"}),(m:Auction{Name:"Starting Bid"}) MERGE (p3)-[r:Contains]->(m)
+
+// Relations between Auction and Pay Entities
+MATCH (m:Auction{Name:"Starting Bid"}),(pa3:Pay{Name:"Agreed Price"}) MERGE (m)-[r:Matures_to]->(pa3)
+
+//Relations between Chance and Pay Entities
+MATCH (ch1:Chance{Name:"Winner"}),(pa3:Pay{Name:"Agreed Price"}) MERGE (ch1)-[r:Pays]->(pa3)
+
+
+// Relations among Customer and Pay Entities
+MATCH (pa1:Pay{Name:"Buying Price"}),(c1:Customer{Name:"Hermann"}) MERGE (pa1)<-[r:Pays]-(c1)
+MATCH (pa2:Pay{Name:"Renting Price"}),(c2:Customer{Name:"Bertha"}) MERGE (pa2)<-[r:Pays]-(c2)
+
+// Relations among Main_User and Purchase Entities
+MATCH (mu:Main_User{Name:"Store Owner"}), (p1:Purchase{Name:"Buy"}) MERGE (mu)-[r:Creates]->(p1)
+MATCH (mu:Main_User{Name:"Store Owner"}), (p2:Purchase{Name:"Rent"}) MERGE (mu)-[r:Creates]->(p2)
+MATCH (mu:Main_User{Name:"Store Owner"}), (p3:Purchase{Name:"Bid"}) MERGE (mu)-[r:Creates]->(p3)
+
+//// Relations among Puchase and Pay Entities
+MATCH (pa1:Pay{Name:"Buying Price"}), (p1:Purchase{Name:"Buy"}) MERGE (pa1)<-[r:Contains]-(p1)
+MATCH (pa2:Pay{Name:"Renting Price"}), (p2:Purchase{Name:"Rent"}) MERGE (pa2)<-[r:Contains]-(p2)
+
+// Relations among Customer and Purchase Entities
+MATCH (p1:Purchase{Name:"Buy"}),(c1:Customer{Name:"Hermann"}) MERGE (p1)<-[r:Wants_to]-(c1)
+MATCH (p2:Purchase{Name:"Rent"}),(c2:Customer{Name:"Bertha"}) MERGE (p2)<-[r:Wants_to]-(c2)
+MATCH (p3:Purchase{Name:"Bid"}),(c3:Customer{Name:"Wolfgang"}) MERGE (p3)<-[r:Wants_to]-(c3)
+MATCH (p3:Purchase{Name:"Bid"}),(c4:Customer{Name:"Anna"}) MERGE (p3)<-[r:Wants_to]-(c4)
+MATCH (p3:Purchase{Name:"Bid"}),(c5:Customer{Name:"Niklas"}) MERGE (p3)<-[r:Wants_to]-(c5)
+
+// Relations among Verified_Categories and Customer Entities
+// Hermann wants to buy
+MATCH (vc2:verified_Categories{Name:"Paintings"}),(c1:Customer{Name:"Hermann"}) MERGE (vc2)<-[r:Checks]-(c1)
+MATCH (vc3:verified_Categories{Name:"Furniture"}),(c1:Customer{Name:"Hermann"}) MERGE (vc3)<-[r:Checks]-(c1)
+
+//Bertha wants to Rent
+MATCH (vc2:verified_Categories{Name:"Paintings"}),(c2:Customer{Name:"Bertha"}) MERGE (vc2)<-[r:Checks]-(c2)
+MATCH (vc3:verified_Categories{Name:"Furniture"}),(c2:Customer{Name:"Bertha"}) MERGE (vc3)<-[r:Checks]-(c2)
+
+// Wolfgang wants to Bid
+MATCH (vc1:verified_Categories{Name:"Cars"}),(c3:Customer{Name:"Wolfgang"}) MERGE (vc1)<-[r:Checks]-(c3)
+MATCH (vc4:verified_Categories{Name:"Clocks"}),(c3:Customer{Name:"Wolfgang"}) MERGE (vc4)<-[r:Checks]-(c3)
+
+// Anna wants to Bid
+MATCH (vc1:verified_Categories{Name:"Cars"}),(c4:Customer{Name:"Anna"}) MERGE (vc1)<-[r:Checks]-(c4)
+MATCH (vc4:verified_Categories{Name:"Clocks"}),(c4:Customer{Name:"Anna"}) MERGE (vc4)<-[r:Checks]-(c4)
+
+// Niklas wants to Bid
+MATCH (vc1:verified_Categories{Name:"Cars"}),(c5:Customer{Name:"Niklas"}) MERGE (vc1)<-[r:Checks]-(c5)
+MATCH (vc4:verified_Categories{Name:"Clocks"}),(c5:Customer{Name:"Niklas"}) MERGE (vc4)<-[r:Checks]-(c5)
+
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+//Deleting a relationship between two nodes
+MATCH (mu:Main_User{Name:"Store Owner"})<-[r:Inserts]-(i:Information{Name:"Categories and Information"})
+DELETE r
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+CREATE (c1:Customer{Name:"Hermann"})
+CREATE (c2:Customer{Name:"Bertha"})
+CREATE (c3:Customer{Name:"Wolfgang"})
+
+
+
+{
+  "surname" : "Taylor"
+}
+
+MATCH (c1:Customer{Name:"Hermann"})
+SET c1.surname = "$surname"
+RETURN c1.name, c1.surname
+
+
+
+//(MATCH (c2:Categories{Name:"Paintings"}),(p1:Purchase{Name:"Buy"}) MERGE (c2)-[r:Enters]->(p1) WHERE c2.Type = "Common")
+
+
+//(MATCH (c3:Categories{Name:"Furniture"})
+SET c3.type = "Common"
+RETURN c3.Name, c3.type
+MATCH (c3:Categories{Name:"Furniture"})
+SET c3.size = "Large"
+RETURN c3.Name, c3.type)
+
+
+
+//(MATCH (c2:Categories{Name:"Paintings"})
+WHERE c2.Type = "Common"
+RETURN c2)
+
+CREATE (neo {name:"maximus"})
+CREATE (andy { name:"Andy" })
+CREATE (michael { name: "Michael" })
+
+MATCH p =(andy { name:'Andy' })-[:WORKS_AT]->(neo)<-[:WORKS_AT]-(michael { name: 'Michael' })
+RETURN p
+
+
+
